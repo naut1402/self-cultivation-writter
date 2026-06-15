@@ -15,8 +15,8 @@ from typing import Any
 #   OpenRouter:         "openrouter/deepseek/deepseek-chat"
 #   OpenAI-compatible:  "openai/<model>"        (+ set OPENAI_BASE_URL + OPENAI_API_KEY)
 #   Local Ollama:       "ollama_chat/qwen2.5:14b"  (+ run `ollama serve`)
-PROSE_MODEL = "anthropic/claude-opus-4-8"
-MECHANICAL_MODEL = "anthropic/claude-sonnet-4-6"
+PROSE_MODEL = "openrouter/deepseek/deepseek-chat"
+MECHANICAL_MODEL = "openrouter/deepseek/deepseek-chat"
 
 PROFILES: dict[str, dict[str, Any]] = {
     "worldbuilder": {
