@@ -9,6 +9,12 @@ from __future__ import annotations
 from typing import Any
 
 # Prose-heavy roles → strongest model; mechanical roles → cheaper model.
+# Swap these slugs to change provider — the LLM wrapper handles dispatch:
+#   Anthropic:          "anthropic/claude-opus-4-8"
+#   OpenAI:             "openai/gpt-4o"
+#   OpenRouter:         "openrouter/deepseek/deepseek-chat"
+#   OpenAI-compatible:  "openai/<model>"        (+ set OPENAI_BASE_URL + OPENAI_API_KEY)
+#   Local Ollama:       "ollama_chat/qwen2.5:14b"  (+ run `ollama serve`)
 PROSE_MODEL = "anthropic/claude-opus-4-8"
 MECHANICAL_MODEL = "anthropic/claude-sonnet-4-6"
 

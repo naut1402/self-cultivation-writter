@@ -27,6 +27,23 @@ def _is_claude_no_sampling(model: str) -> bool:
     return any(tag in m for tag in _CLAUDE_NO_SAMPLING)
 
 
+def resolve_api_base(model: str) -> str | None:
+    """Pick the endpoint for self-hosted / OpenAI-compatible models.
+
+    - ollama / ollama_chat slugs  -> local Ollama server
+    - openai/<model> slug         -> custom OpenAI-compatible endpoint, if configured
+    Returns None for first-party providers (Anthropic/OpenAI/OpenRouter) that use defaults.
+    """
+    from app.core.config import settings
+
+    m = model.lower()
+    if m.startswith(("ollama/", "ollama_chat/")):
+        return settings.ollama_base_url
+    if m.startswith("openai/") and settings.openai_base_url:
+        return settings.openai_base_url
+    return None
+
+
 def sanitize_params(model: str, params: dict[str, Any] | None) -> dict[str, Any]:
     """Drop params a given model would reject and translate intent.
 
@@ -61,6 +78,11 @@ class LLMClient:
         msgs.extend(messages)
 
         kwargs: dict[str, Any] = {"model": model, "messages": msgs, **sanitize_params(model, params)}
+        # Self-hosted / OpenAI-compatible endpoint (don't override an explicit api_base).
+        if "api_base" not in kwargs:
+            api_base = resolve_api_base(model)
+            if api_base:
+                kwargs["api_base"] = api_base
         if json_mode:
             kwargs["response_format"] = {"type": "json_object"}
 

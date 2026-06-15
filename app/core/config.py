@@ -19,6 +19,12 @@ class Settings(BaseSettings):
     openai_api_key: str | None = None
     openrouter_api_key: str | None = None
 
+    # OpenAI-compatible endpoints (LM Studio, vLLM, Groq, Together, DeepSeek-direct, …):
+    # use an `openai/<model>` slug and point here.
+    openai_base_url: str | None = None
+    # Local Ollama: use an `ollama_chat/<model>` slug.
+    ollama_base_url: str = "http://localhost:11434"
+
 
 settings = Settings()
 

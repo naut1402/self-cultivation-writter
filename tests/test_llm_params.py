@@ -1,7 +1,7 @@
 """AC for #6b: the wrapper must never send sampling params to Claude 4.x models,
 and must pass them through for models that accept them."""
 
-from app.llm.client import sanitize_params
+from app.llm.client import resolve_api_base, sanitize_params
 
 
 def test_strips_temperature_for_claude_opus_4_8():
@@ -29,3 +29,13 @@ def test_passes_temperature_through_for_openai():
 def test_passes_through_for_openrouter_deepseek():
     out = sanitize_params("openrouter/deepseek/deepseek-chat", {"temperature": 0.9})
     assert out["temperature"] == 0.9
+
+
+def test_ollama_resolves_to_local_base():
+    assert resolve_api_base("ollama_chat/qwen2.5:14b") == "http://localhost:11434"
+
+
+def test_first_party_providers_have_no_api_base():
+    assert resolve_api_base("anthropic/claude-opus-4-8") is None
+    # openai/ slug only gets a base when OPENAI_BASE_URL is configured (unset in tests)
+    assert resolve_api_base("openai/gpt-4o") is None
