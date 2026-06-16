@@ -35,6 +35,8 @@ app/
   profiles/      # hardcoded VN AI profiles (worldbuilder, power-system, outliner, drafter)
   orchestrator/  # sequential v0 pipeline
 ui/              # Streamlit app
+n8n/             # placeholder for v1 n8n flow exports (empty in v0)
+  flows/
 tests/
 ```
 
